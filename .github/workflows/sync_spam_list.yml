@@ -1,0 +1,28 @@
+name: Automated Spam Compilation Pipeline
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Executes automatically every Sunday at midnight
+  workflow_dispatch: # Adds a button in GitHub allowing you to run it manually anytime
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Import Code Tree
+        uses: actions/checkout@v3
+
+      - name: Initialize Environment Runtime
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Execute Aggregator Code
+        run: python aggregate_spam.py
+
+      - name: Deploy Updated Flat Asset to Main Tree
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Automation Engine"
+          git add master_blocklist.txt
+          git commit -m "System Sync: Compiled live Indian smishing indicators" || exit 0
+          git push
