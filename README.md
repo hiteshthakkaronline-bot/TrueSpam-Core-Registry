@@ -1,0 +1,1 @@
+# TrueSpam-Core-Registry
