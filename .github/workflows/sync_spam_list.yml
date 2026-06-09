@@ -7,12 +7,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Explicit backup layer to guarantee write access for committing files
+    permissions:
+      contents: write
+      
     steps:
       - name: Import Code Tree
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Upgraded to clear deprecation warning
 
       - name: Initialize Environment Runtime
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # Upgraded to clear deprecation warning
         with:
           python-version: '3.x'
 
